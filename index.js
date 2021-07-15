@@ -65,7 +65,6 @@ Client.on('message', async (message) => {
                 await RPGADD.save();
 
             }
-
             else if (con.includes('adv') || con.includes('adventure')) {
                 if (msg.embeds.length)
                     return;
