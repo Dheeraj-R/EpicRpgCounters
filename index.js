@@ -4,7 +4,7 @@ const RpgCount = require('./models/rpgcounters')
 const mongoose = require("mongoose");
 const { prefix, token, DB_URL } = require('./config.json');
 const { db } = require("./models/rpgcounters");
-const cron = require("node-cron");
+const cron = require("node-cron");  //using this module for resetting the leaderboard everyday
 
 
 
@@ -100,19 +100,12 @@ Client.on('message', async (message) => {
     const command = args.shift().toLowerCase();
 
     if (command === 'stats') {
-        let crusaderVal;
-        let crusader = message.member.roles.cache.find(role => role.id === '826475830388457522');
-        if (crusader !== undefined) {
-            crusaderVal = "<:shinystar:789852176218456085> Special Giveaways Bonus Enabled";
-        } 
-        else { crusaderVal = "<:shinystar:789852176218456085> Special Giveaways Bonus Disabled";}
         const embed = new Discord.MessageEmbed()
             .setColor(0x00AE86)
             .setAuthor(message.author.username, message.author.avatarURL())
             .setTitle(`Statistics for ${message.author.username}`)
             .addFields(
-                {name: 'Commands', value: `**Hunts**: ${RPGADD.huntcount} | **Worker**: ${RPGADD.workcount} | **Adventure**: ${RPGADD.advcount} | **Farm**: ${RPGADD.farmcount}`, inline: true},
-                {name: 'Crusader', value: `${crusaderVal}`}
+                {name: 'Commands', value: `**Hunts**: ${RPGADD.huntcount} | **Worker**: ${RPGADD.workcount} | **Adventure**: ${RPGADD.advcount} | **Farm**: ${RPGADD.farmcount}`, inline: true}
             )
             .setTimestamp()
         message.channel.send({ embed });
@@ -166,7 +159,7 @@ Client.on('message', async (message) => {
     if (!message.content.startsWith(prefix)) return;
     
     if (command === 'reset') {
-        let staffrole = message.member.roles.cache.find(role => role.id === '778144465503518750')
+        let staffrole = message.member.roles.cache.find(role => role.id === 'STAFF_ROLE_ID')
         if (staffrole == undefined) 
             return;
         const doc = await RpgCount.updateMany({}, {huntcount: 0, workcount: 0, advcount: 0, farmcount: 0});
